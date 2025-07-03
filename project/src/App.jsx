@@ -7,6 +7,7 @@ import ValidateEmailScreen from './components/ValidateEmailScreen';
 import PersonalInfoScreen from './components/PersonalInfoScreen';
 import LoginScreen from './components/LoginScreen';
 import CreateNewPasswordScreen from './components/CreateNewPasswordScreen';
+import DashboardHome from './components/Dashboard/DashboardHome';
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState('welcome');
@@ -42,7 +43,9 @@ function App() {
       case 'personal-info':
         return <PersonalInfoScreen onComplete={() => console.log('Profile setup complete')} />;
       case 'login':
-        return <LoginScreen onNavigate={navigateToScreen} />;
+        return <LoginScreen onNavigate={navigateToScreen} onLoginSuccess={() => navigateToScreen('dashboard')} />;
+      case 'dashboard':
+        return <DashboardHome />;
       case 'create-new-password':
         return <CreateNewPasswordScreen onComplete={() => navigateToScreen('login')} onBack={() => navigateToScreen('login')} />;
       default:

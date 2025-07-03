@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FileText, Scale, ArrowRight, Eye, EyeOff } from 'lucide-react';
 
-const LoginScreen = ({ onNavigate }) => {
+const LoginScreen = ({ onNavigate, onLoginSuccess }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -37,8 +37,8 @@ const LoginScreen = ({ onNavigate }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      // Handle login logic here
-      console.log('Login attempt:', formData);
+      // ...login logic...
+      if (onLoginSuccess) onLoginSuccess();
     }
   };
 
