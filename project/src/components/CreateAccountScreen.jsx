@@ -57,27 +57,33 @@ const CreateAccountScreen = ({ onSubmit, onBack, onForgotPassword }) => {
   };
 
 
-    const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+      e.preventDefault();
   if (!validateForm()) return;
 
   try {
     const { token, user } = await registerUser({
-      name: formData.fullName,
+      fullName: formData.fullName,
       email: formData.email,
       phone: formData.phone,
       password: formData.password
     });
 
-    localStorage.setItem('token', token);          // persist token
-    if (onSubmit) onSubmit(user);                  // parent can route away
+    localStorage.setItem('token', token); // Save token
+    if (onSubmit) onSubmit(user);         // Proceed after registration
   } catch (err) {
-    /* optional: surface backend error */
+    // 🔥 THIS is the key line you needed
+    console.log(' register error', err?.response?.status, err?.response?.data);
+
     const msg =
-      err?.response?.data?.message || 'Registration failed. Try again.';
-    setErrors({ api: msg });
+      err?.response?.data?.message ||      // common message field
+      err?.response?.data?.error ||        // sometimes used
+      err?.response?.data?.errors?.[0] ||  // if it’s an array
+      'Registration failed. Try again.';
+    
+    setErrors({ api: msg });               // Show error to user
   }
-};
+  };
 
 
 

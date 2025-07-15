@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'https://caseport.onrender.com',      // <— base URL you gave
+  baseURL: 'api',      // <— base URL you gave
   headers: { 'Content-Type': 'application/json'}
 });
 
