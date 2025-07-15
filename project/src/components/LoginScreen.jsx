@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { FileText, Scale, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { loginUser } from '/src/authService.js';
+
+
 
 const LoginScreen = ({ onNavigate, onLoginSuccess }) => {
   const [formData, setFormData] = useState({
@@ -34,13 +37,24 @@ const LoginScreen = ({ onNavigate, onLoginSuccess }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      // ...login logic...
-      if (onLoginSuccess) onLoginSuccess();
-    }
-  };
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!validateForm()) return;
+
+  try {
+    const { token, user } = await loginUser(formData);
+    localStorage.setItem('token', token);
+    if (onLoginSuccess) onLoginSuccess(user);   // tell parent we’re in
+  } catch (err) {
+    const msg =
+      err?.response?.data?.message || 'Invalid email or password';
+    setErrors({ api: msg });
+  }
+};
+
+const handleAuthSuccess = (user) => {
+  navigate('/dashboard');   // react-router example
+};
 
   return (
     <div className="Background min-h-screen flex" style={{
@@ -147,6 +161,9 @@ const LoginScreen = ({ onNavigate, onLoginSuccess }) => {
                 </button>
               </div>
             </div>
+            
+            {errors.api && <p className="text-red-500 text-sm">{errors.api}</p>}
+
           </form>
         </div>
       </div>

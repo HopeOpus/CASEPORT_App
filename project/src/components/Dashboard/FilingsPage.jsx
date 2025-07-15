@@ -64,7 +64,7 @@ const FilingsPage = ({ onStartNewFiling }) => {
         <div className="empty-filings">
           <div className="empty-filings-icon">
             <div className="filing-box">
-              <FileText className="filing-icon" />
+              <img src="./src/components/Dashboard/img/files.svg" alt="files" />
             </div>
           </div>
           <p className="empty-filings-message">No appeal or motion filed</p>

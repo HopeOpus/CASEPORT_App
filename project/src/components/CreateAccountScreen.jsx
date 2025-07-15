@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { FileText, Scale, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { registerUser } from '/src/authService.js';   // adjust path if needed
+
 
 const CreateAccountScreen = ({ onSubmit, onBack, onForgotPassword }) => {
   const [formData, setFormData] = useState({
@@ -54,12 +56,30 @@ const CreateAccountScreen = ({ onSubmit, onBack, onForgotPassword }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      onSubmit(formData);
-    }
-  };
+
+    const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!validateForm()) return;
+
+  try {
+    const { token, user } = await registerUser({
+      name: formData.fullName,
+      email: formData.email,
+      phone: formData.phone,
+      password: formData.password
+    });
+
+    localStorage.setItem('token', token);          // persist token
+    if (onSubmit) onSubmit(user);                  // parent can route away
+  } catch (err) {
+    /* optional: surface backend error */
+    const msg =
+      err?.response?.data?.message || 'Registration failed. Try again.';
+    setErrors({ api: msg });
+  }
+};
+
+
 
   return (
     <div className="min-h-screen flex">
@@ -249,6 +269,7 @@ const CreateAccountScreen = ({ onSubmit, onBack, onForgotPassword }) => {
                 </button>
               </div>
             </div>
+            {errors.api && <p className="text-red-500 text-sm">{errors.api}</p>}
           </form>
         </div>
       </div>
