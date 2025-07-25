@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FileText, Scale, ArrowRight, Eye, EyeOff } from 'lucide-react';
-import { registerUser } from '/src/authService.js';   // adjust path if needed
+import { registerUser } from '../authService.js';   // adjust path if needed
 
 
 const CreateAccountScreen = ({ onSubmit, onBack, onForgotPassword }) => {
@@ -62,15 +62,16 @@ const CreateAccountScreen = ({ onSubmit, onBack, onForgotPassword }) => {
   if (!validateForm()) return;
 
   try {
-    const { token, user } = await registerUser({
+    const {  email } = await registerUser({
       fullName: formData.fullName,
       email: formData.email,
-      phone: formData.phone,
+      phoneNumber: formData.phone, // <-- change 'phone' to 'phoneNumber'
       password: formData.password
     });
 
-    localStorage.setItem('token', token); // Save token
-    if (onSubmit) onSubmit(user);         // Proceed after registration
+   // localStorage.setItem('token', token); // Save token
+    console.log('Registration successful:', email);
+    if (onSubmit) onSubmit(email); // Proceed after registration
   } catch (err) {
     // 🔥 THIS is the key line you needed
     console.log(' register error', err?.response?.status, err?.response?.data);
@@ -270,7 +271,11 @@ const CreateAccountScreen = ({ onSubmit, onBack, onForgotPassword }) => {
               </button>
               <div className="flex items-center space-x-2">
                 <span className="text-gray-600">I already have an account</span>
-                <button type="button" className="text-green-800 hover:underline font-medium">
+                <button
+                  type="button"
+                  className="text-green-800 hover:underline font-medium"
+                  onClick={onBack} // Navigates to LoginScreen
+                >
                   Log in
                 </button>
               </div>

@@ -1,14 +1,19 @@
 // src/authService.js
 import API from './api';
 
-// POST /api/auth/register
+// POST /auth/register
 export const registerUser = async (data) => {
-  const res = await API.post('/api/auth/register', data);
+  const res = await API.post('/auth/register', data);
+  return data;   // expected { user, token }
+};
+
+// POST /auth/login
+export const loginUser = async (data) => {
+  const res = await API.post('/auth/login', data);
   return res.data;   // expected { user, token }
 };
 
-// POST /api/auth/login
-export const loginUser = async (data) => {
-  const res = await API.post('/api/auth/login', data);
-  return res.data;   // expected { user, token }
+export const validateEmailToken = async (email, code) => {
+  const res = await API.post('/auth/validate-email-token', { email, code });
+  return res.data;   // expected { success: boolean, message?: string }
 };

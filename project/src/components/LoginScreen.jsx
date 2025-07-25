@@ -44,7 +44,7 @@ const LoginScreen = ({ onNavigate, onLoginSuccess }) => {
   try {
     const { token, user } = await loginUser(formData);
     localStorage.setItem('token', token);
-    if (onLoginSuccess) onLoginSuccess(user);   // tell parent we’re in
+    onLoginSuccess(); // Navigate to dashboard
   } catch (err) {
     const msg =
       err?.response?.data?.message || 'Invalid email or password';

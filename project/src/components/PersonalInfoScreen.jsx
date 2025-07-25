@@ -132,9 +132,14 @@ const PersonalInfoScreen = ({ onComplete }) => {
     }
   };
 
-  const handleComplete = () => {
+  const handleComplete = async () => {
     if (validateStep(4)) {
-      onComplete(formData);
+      try {
+        await API.post('/user/profile', formData);
+        onComplete(); // Call navigation to Login
+      } catch (err) {
+        setErrors({ api: 'Failed to save profile. Try again.' });
+      }
     }
   };
 

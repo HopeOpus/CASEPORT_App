@@ -2,8 +2,8 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'api',      // <— base URL you gave
-  headers: { 'Content-Type': 'application/json'}
+  baseURL: 'https://caseport.onrender.com',
+  headers: { 'Content-Type': 'application/json' }
 });
 
 // Attach the token (if we already have one) before every request
